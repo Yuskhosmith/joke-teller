@@ -29,24 +29,44 @@ function tellMe(joke) {
 async function getJokes() {
     let joke = '';
     const apiUrl = 'https://sv443.net/jokeapi/v2/joke/Programming?blacklistFlags=nsfw,racist,sexist';
+    // const apiUrl = 'https://v2.jokeapi.dev/joke/Programming?blacklistFlags=nsfw,religious,political,racist,sexist,explicit';
     
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json;
-        if (data.setup) {
-            joke = `${data.setup} ... ${data.delivery}`;
-        } else {
-            joke = data.joke;
-        }
-        // Text-to-Speech
-        tellMe(joke);
-        // Disable Button
-        toggleButton();
-    } catch (error){
+    return fetch(apiUrl)
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            if (data.setup) {
+                joke = `${data.setup} ... ${data.delivery}`;
+            } else {
+                joke = data.joke;
+                }
+            // Text-to-Speech
+            tellMe(joke);
+            // Disable Button
+            toggleButton();
+        }).catch(err => {
+            console.error('fetxh failed', err)
+        })
+    // try {
+        // const response = await fetch(apiUrl);
+        // const data = await response.json;
+        // console.log(data);
+        // if (data.setup) {
+        //     joke = `${data.setup} ... ${data.delivery}`;
+        // } else {
+        //     joke = data.joke;
+        // }
+        // // Text-to-Speech
+        // tellMe(joke);
+        // // Disable Button
+        // toggleButton();
+    // } catch (error){
         // Catch errors here
-        console.log('whoops', error);
-    }
+        // console.log('whoops', error);
+    // }
 }
+
+
 
 // Event Listeners
 button.addEventListener('click', getJokes);
